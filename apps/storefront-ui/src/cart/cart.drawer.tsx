@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useCart } from './cart.context';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Drawer = styled.div<{ open: boolean }>`
   position: fixed;
@@ -139,11 +139,13 @@ const CartListItem = styled.li`
 `;
 
 const CartDrawer = () => {
+  const navigate = useNavigate();
   const { items, open, setOpen, increaseQty, decreaseQty, removeFromCart, clearCart } = useCart();
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   const handleCheckout = () => {
-    alert('Checkout not implemented yet!');
+    navigate('checkout');
+    setOpen(false);
   };
 
   return (

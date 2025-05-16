@@ -10,6 +10,7 @@ import { VendorsProvider } from './pages/vendor/vendor.context';
 import { ProductsProvider } from './pages/product/product.context';
 import { CartProvider } from './cart/cart.context';
 import CartDrawer from './cart/cart.drawer';
+import CheckoutPage from './pages/checkout/checkout.page';
 
 const vendorRoutes: RouteObject[] = [
   {
@@ -45,6 +46,17 @@ const productRoutes: RouteObject[] = [
   },
 ];
 
+const checkoutRoutes: RouteObject[] = [{
+  path: 'checkout',
+  element: <Outlet />,
+  children: [
+    {
+      index: true,
+      element: <CheckoutPage />,
+    },
+  ]
+}]
+
 const routes: RouteObject[] = [
   {
     path: '/',
@@ -67,6 +79,7 @@ const routes: RouteObject[] = [
       },
       ...vendorRoutes,
       ...productRoutes,
+      ...checkoutRoutes
     ],
   },
 ];
