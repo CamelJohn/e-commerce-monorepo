@@ -14,10 +14,12 @@ import {
 } from './env.constatns';
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { AuthModule } from './auth/auth.module';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ validate, isGlobal: true, envFilePath: '.env.dev' }),
+    HealthModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
