@@ -40,3 +40,18 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+  
+  storefront-ui:
+    build:
+      context: .
+      dockerfile: ./apps/storefront-ui/Dockerfile.dev
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./apps/storefront-ui:/app/apps/storefront-ui
+      - /app/apps/storefront-ui/node_modules
+    ports:
+      - "5173:5173"
+    env_file:
+      - ./apps/storefront-ui/.env.dev
+    depends_on:
+      - api-gateway
