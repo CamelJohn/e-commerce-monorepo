@@ -1,0 +1,23 @@
+FROM node:20
+
+WORKDIR /app
+
+# Copy all monorepo files needed for install/build
+COPY package.json package-lock.json turbo.json ./
+COPY apps/api-gateway/package.json apps/api-gateway/package-lock.json ./apps/api-gateway/
+
+# Install all dependencies (including workspaces)
+RUN npm install
+
+# Copy the rest of the monorepo
+COPY . .
+
+# Build only the api-gateway app
+RUN npx turbo run build --filter=api-gateway
+
+# Set the working directory to the app for runtime
+WORKDIR /app/apps/api-gateway
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start:dev"]

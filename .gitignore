@@ -1,0 +1,14 @@
+# folders
+node_modules/
+dist/
+
+# dotfiles
+.turbo
+.env*
+.env.dev
+!.env.example
+
+# files
+*.pem
+*.crt
+*.key
