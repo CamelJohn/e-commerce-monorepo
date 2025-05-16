@@ -5,13 +5,12 @@ services:
       dockerfile: ./apps/api-gateway/Dockerfile.dev
     command: npm run start:dev
     volumes:
-      - ./apps/api-gateway:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./apps/api-gateway:/app/apps/api-gateway
+      - /app/apps/api-gateway/node_modules
     ports:
       - "3000:3000"
     env_file:
         - ./apps/api-gateway/.env.dev
-      # Add other env vars as needed
     depends_on:
       localstack:
         condition: service_healthy

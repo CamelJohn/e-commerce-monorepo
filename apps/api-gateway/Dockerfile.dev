@@ -12,6 +12,9 @@ RUN npm install
 # Copy the rest of the monorepo
 COPY . .
 
+# Type check before build
+RUN npx turbo run types --filter=api-gateway
+
 # Build only the api-gateway app
 RUN npx turbo run build --filter=api-gateway
 
