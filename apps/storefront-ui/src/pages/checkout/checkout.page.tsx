@@ -1,9 +1,11 @@
-import { useCart } from '../../cart/cart.context';
-import { Link, useNavigate } from 'react-router-dom';
+import { CheckoutProvider, useCheckout } from './checkout.context';
+import { BillingStep } from './steps/checkout.billing.step';
+import { ShippingStep } from './steps/checkout.shipping.step';
+import { PaymentStep } from './steps/checkout.payment.step';
+import { ReviewStep } from './steps/checkout.review.and.submit';
 import styled from 'styled-components';
-import { useState } from 'react';
 
-const CheckoutContainer = styled.div`
+export const CheckoutContainer = styled.div`
   max-width: 520px;
   margin: 40px auto;
   background: ${({ theme }) => theme.colors.navBg};
@@ -13,11 +15,11 @@ const CheckoutContainer = styled.div`
   box-shadow: 0 2px 12px rgba(162,89,255,0.07);
 `;
 
-const Section = styled.section`
+export const Section = styled.section`
   margin-bottom: 28px;
 `;
 
-const ItemRow = styled.div`
+export const ItemRow = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -26,7 +28,7 @@ const ItemRow = styled.div`
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
-const TotalRow = styled.div`
+export const TotalRow = styled.div`
   display: flex;
   justify-content: space-between;
   font-weight: 600;
@@ -34,13 +36,13 @@ const TotalRow = styled.div`
   margin-top: 18px;
 `;
 
-const Label = styled.label`
+export const Label = styled.label`
   display: block;
   margin-bottom: 6px;
   font-weight: 500;
 `;
 
-const Input = styled.input`
+export const Input = styled.input`
   width: 100%;
   padding: 7px 10px;
   border: 1px solid ${({ theme }) => theme.colors.border};
@@ -50,7 +52,22 @@ const Input = styled.input`
   color: ${({ theme }) => theme.colors.text};
 `;
 
-const CheckoutButton = styled.button`
+export const Select = styled.select`
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  border-radius: 5px;
+  margin-bottom: 14px;
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+export const Option = styled.option`
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+`;
+
+export const CheckoutButton = styled.button`
   margin-top: 18px;
   width: 100%;
   background: ${({ theme }) => theme.colors.primary};
@@ -67,7 +84,7 @@ const CheckoutButton = styled.button`
   }
 `;
 
-const BackButton = styled.button`
+export const BackButton = styled.button`
   display: block;
   margin: 16px auto 0 auto;
   background: none;
@@ -86,102 +103,106 @@ const BackButton = styled.button`
   }
 `;
 
-const CheckoutPage = () => {
-  const { items, clearCart, setOpen } = useCart();
-  const navigate = useNavigate();
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+export const paymentPlans = [
+  { value: 'once', label: 'One-time Payment' },
+  { value: '3mo', label: '3-Month Installments' },
+  { value: '6mo', label: '6-Month Installments' },
+];
 
-  // Simple state for form fields
-  const [form, setForm] = useState({
-    billingName: '',
-    billingEmail: '',
-    shippingAddress: '',
-    shippingCity: '',
-    shippingZip: '',
-    cardNumber: '',
-    cardExpiry: '',
-    cardCVC: '',
-  });
+export const shippingVendors = [
+  { value: 'fedex', label: 'FedEx' },
+  { value: 'dhl', label: 'DHL' },
+  { value: 'ups', label: 'UPS' },
+];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+export const paymentMethods = [
+  { value: 'stripe', label: 'Credit/Debit Card (Stripe)' },
+  { value: 'paypal', label: 'PayPal' },
+];
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Here you would validate and process payment/order
-    clearCart();
-    alert('Order placed! Thank you for shopping.');
-    navigate('/');
-  };
+const Stepper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;
 
-  if (items.length === 0) {
-    return (
-      <CheckoutContainer>
-        <h2>Checkout</h2>
-        <p>Your cart is empty.</p>
-        <BackButton
-          onClick={() => {
-            navigate('/product');
-            setOpen(true);
-          }}
-        >
-          Back to Products
-        </BackButton>
-      </CheckoutContainer>
-    );
+const StepCircle = styled.div<{ active: boolean }>`
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: ${({ theme, active }) => active ? theme.colors.primary : theme.colors.border};
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+`;
+
+export const WizardActions = styled.div`
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+  justify-content: flex-end;
+`;
+
+export const WizardButton = styled.button<{ variant?: 'primary' | 'secondary' }>`
+  background: ${({ theme, variant }) =>
+    variant === 'secondary' ? theme.colors.navBg : theme.colors.primary};
+  color: ${({ theme, variant }) =>
+    variant === 'secondary' ? theme.colors.primary : '#fff'};
+  border: 1.5px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 6px;
+  padding: 9px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border 0.18s;
+  &:hover, &:focus {
+    background: ${({ theme, variant }) =>
+      variant === 'secondary' ? theme.colors.primary : theme.colors.accent};
+    color: #fff;
+    outline: none;
   }
+  &:disabled {
+    background: ${({ theme }) => theme.colors.border};
+    color: #aaa;
+    border-color: ${({ theme }) => theme.colors.border};
+    cursor: not-allowed;
+  }
+`;
+
+const steps = [
+  { label: 'Billing' },
+  { label: 'Shipping' },
+  { label: 'Payment' },
+  { label: 'Review' },
+];
+
+const CheckoutWizard = () => {
+  const { step } = useCheckout();
 
   return (
     <CheckoutContainer>
-      <h2>Review Your Order</h2>
-      <Section>
-        {items.map(item => (
-          <ItemRow key={item.id}>
-            <span>
-              {item.name} <span style={{ color: '#a259ff' }}>× {item.quantity}</span>
-            </span>
-            <span>${(item.price * item.quantity).toFixed(2)}</span>
-          </ItemRow>
+      <Stepper>
+        {steps.map((s, i) => (
+          <div key={s.label} style={{ textAlign: 'center', flex: 1 }}>
+            <StepCircle active={step === i}>{i + 1}</StepCircle>
+            <div style={{ fontSize: 12, color: '#aaa', marginTop: 4 }}>{s.label}</div>
+          </div>
         ))}
-        <TotalRow>
-          <span>Total</span>
-          <span>${total.toFixed(2)}</span>
-        </TotalRow>
-      </Section>
-      <form onSubmit={handleSubmit}>
-        <Section>
-          <h3>Billing Information</h3>
-          <Label htmlFor="billingName">Full Name</Label>
-          <Input id="billingName" name="billingName" value={form.billingName} onChange={handleChange} required />
-          <Label htmlFor="billingEmail">Email</Label>
-          <Input id="billingEmail" name="billingEmail" type="email" value={form.billingEmail} onChange={handleChange} required />
-        </Section>
-        <Section>
-          <h3>Shipping Address</h3>
-          <Label htmlFor="shippingAddress">Address</Label>
-          <Input id="shippingAddress" name="shippingAddress" value={form.shippingAddress} onChange={handleChange} required />
-          <Label htmlFor="shippingCity">City</Label>
-          <Input id="shippingCity" name="shippingCity" value={form.shippingCity} onChange={handleChange} required />
-          <Label htmlFor="shippingZip">ZIP/Postal Code</Label>
-          <Input id="shippingZip" name="shippingZip" value={form.shippingZip} onChange={handleChange} required />
-        </Section>
-        <Section>
-          <h3>Payment</h3>
-          <Label htmlFor="cardNumber">Card Number</Label>
-          <Input id="cardNumber" name="cardNumber" value={form.cardNumber} onChange={handleChange} required />
-          <Label htmlFor="cardExpiry">Expiry (MM/YY)</Label>
-          <Input id="cardExpiry" name="cardExpiry" value={form.cardExpiry} onChange={handleChange} required />
-          <Label htmlFor="cardCVC">CVC</Label>
-          <Input id="cardCVC" name="cardCVC" value={form.cardCVC} onChange={handleChange} required />
-        </Section>
-        <CheckoutButton type="submit">Place Order</CheckoutButton>
-      </form>
-      <Link to="/product" style={{ display: 'block', marginTop: 16, textAlign: 'center' }}>
-        Back to Products
-      </Link>
+      </Stepper>
+      {step === 0 && <BillingStep />}
+      {step === 1 && <ShippingStep />}
+      {step === 2 && <PaymentStep />}
+      {step === 3 && <ReviewStep />}
     </CheckoutContainer>
   );
 };
+
+const CheckoutPage = () => (
+  <CheckoutProvider>
+    <CheckoutWizard />
+  </CheckoutProvider>
+);
 
 export default CheckoutPage;
