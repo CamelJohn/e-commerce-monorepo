@@ -1,4 +1,6 @@
-import { IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString, IsUUID } from 'class-validator';
+import { CurrencyEnum } from '../enums/currency.enum';
+import { CurrencySymbolEnum } from '../enums/currency.symbol.enum';
 
 export class CreateProductDto {
   @IsString()
@@ -13,4 +15,12 @@ export class CreateProductDto {
 
   @IsUUID()
   vendorId: string;
+
+  @IsEnum(CurrencyEnum)
+  @IsOptional()
+  currency?: CurrencyEnum;
+
+  @IsEnum(CurrencySymbolEnum)
+  @IsOptional()
+  currencySymbol?: CurrencySymbolEnum;
 }

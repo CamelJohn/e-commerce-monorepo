@@ -1,4 +1,6 @@
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsOptional, IsString } from 'class-validator';
+import { CurrencyEnum } from '../enums/currency.enum';
+import { CurrencySymbolEnum } from '../enums/currency.symbol.enum';
 
 export class UpdateProductDto {
   @IsString()
@@ -12,4 +14,12 @@ export class UpdateProductDto {
   @IsInt()
   @IsOptional()
   price?: number;
+
+  @IsEnum(CurrencyEnum)
+  @IsOptional()
+  currency?: CurrencyEnum;
+
+  @IsEnum(CurrencySymbolEnum)
+  @IsOptional()
+  currencySymbol?: CurrencySymbolEnum;
 }

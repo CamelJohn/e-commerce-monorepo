@@ -5,6 +5,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { CurrencyEnum } from './enums/currency.enum';
+import { CurrencySymbolEnum } from './enums/currency.symbol.enum';
 
 @Entity()
 export class Product {
@@ -14,11 +16,25 @@ export class Product {
   @Column({ nullable: false })
   name: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   description: string;
 
   @Column({ nullable: false })
   price: number;
+
+  @Column({
+    nullable: true,
+    enum: CurrencyEnum,
+    default: CurrencyEnum.USD,
+  })
+  currency: CurrencyEnum;
+
+  @Column({
+    nullable: true,
+    enum: CurrencySymbolEnum,
+    default: CurrencySymbolEnum.USD,
+  })
+  currencySymbol: CurrencySymbolEnum;
 
   @Column({ nullable: false })
   vendorId: string;
