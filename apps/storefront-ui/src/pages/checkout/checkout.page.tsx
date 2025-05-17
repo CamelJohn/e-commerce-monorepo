@@ -67,8 +67,27 @@ const CheckoutButton = styled.button`
   }
 `;
 
+const BackButton = styled.button`
+  display: block;
+  margin: 16px auto 0 auto;
+  background: none;
+  color: ${({ theme }) => theme.colors.primary};
+  border: 1.5px solid ${({ theme }) => theme.colors.primary};
+  border-radius: 6px;
+  padding: 8px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+  text-align: center;
+  &:hover {
+    background: ${({ theme }) => theme.colors.primary};
+    color: #fff;
+  }
+`;
+
 const CheckoutPage = () => {
-  const { items, clearCart } = useCart();
+  const { items, clearCart, setOpen } = useCart();
   const navigate = useNavigate();
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
@@ -101,7 +120,14 @@ const CheckoutPage = () => {
       <CheckoutContainer>
         <h2>Checkout</h2>
         <p>Your cart is empty.</p>
-        <Link to="/product">Back to Products</Link>
+        <BackButton
+          onClick={() => {
+            navigate('/product');
+            setOpen(true);
+          }}
+        >
+          Back to Products
+        </BackButton>
       </CheckoutContainer>
     );
   }
@@ -151,8 +177,8 @@ const CheckoutPage = () => {
         </Section>
         <CheckoutButton type="submit">Place Order</CheckoutButton>
       </form>
-      <Link to="/cart" style={{ display: 'block', marginTop: 16, textAlign: 'center' }}>
-        Back to Cart
+      <Link to="/product" style={{ display: 'block', marginTop: 16, textAlign: 'center' }}>
+        Back to Products
       </Link>
     </CheckoutContainer>
   );
