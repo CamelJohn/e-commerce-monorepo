@@ -15,6 +15,7 @@ import {
 import { UserProfileModule } from './user-profile/user-profile.module';
 import { AuthModule } from './auth/auth.module';
 import { HealthModule } from './health/health.module';
+import { ProductModule } from './products/product.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { HealthModule } from './health/health.module';
       }),
     }),
     UserProfileModule,
+    ProductModule,
     AuthModule,
   ],
   controllers: [AppController],
