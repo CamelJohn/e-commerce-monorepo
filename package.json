@@ -21,15 +21,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^22.15.18",
-    "turbo": "^2.5.3",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@nestjs/axios": "^4.0.0",
-    "@nestjs/terminus": "^11.0.0",
-    "axios": "^1.9.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.2"
+    "turbo": "^2.5.3"
   }
 }
