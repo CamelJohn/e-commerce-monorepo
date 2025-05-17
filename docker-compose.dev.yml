@@ -47,11 +47,26 @@ services:
       dockerfile: ./apps/storefront-ui/Dockerfile.dev
     command: npm run dev -- --host 0.0.0.0
     volumes:
-      - ./apps/storefront-ui:/app/apps/storefront-ui
-      - /app/apps/storefront-ui/node_modules
+      - ./apps/storefront-ui:/app/storefront-ui
+      - /app/storefront-ui/node_modules
     ports:
       - "5173:5173"
     env_file:
       - ./apps/storefront-ui/.env.dev
+    depends_on:
+      - api-gateway
+
+  cms-ui:
+    build:
+      context: .
+      dockerfile: ./apps/cms-ui/Dockerfile.dev
+    command: npm run dev -- --host 0.0.0.0
+    volumes:
+      - ./apps/cms-ui:/app/cms-ui
+      - /app/cms-ui/node_modules
+    ports:
+      - "5174:5174"
+    env_file:
+      - ./apps/cms-ui/.env.dev
     depends_on:
       - api-gateway
