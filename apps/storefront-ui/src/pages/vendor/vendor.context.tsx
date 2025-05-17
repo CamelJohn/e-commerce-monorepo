@@ -4,11 +4,12 @@ export interface Vendor {
   id: string;
   name: string;
   description: string;
+  contactEmail: string;
 }
 
 const vendors: Vendor[] = [
-  { id: 'a', name: 'Vendor A', description: 'Quality apparel and more.' },
-  { id: 'b', name: 'Vendor B', description: 'Unique mugs and accessories.' },
+  { id: 'a', name: 'Vendor A', description: 'Quality shirts', contactEmail: 'a@example.com' },
+  { id: 'b', name: 'Vendor B', description: 'Stylish mugs', contactEmail: 'b@example.com' },
 ];
 
 const VendorsContext = createContext<Vendor[]>(vendors);

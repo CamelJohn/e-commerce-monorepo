@@ -3,15 +3,20 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../../cart/cart.context';
 
 const Card = styled.div`
-  background: ${({ theme }) => theme.colors.navBg};
+  background: ${({ theme }) => theme.colors.cardBg};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(162, 89, 255, 0.07);
-  padding: 20px;
+  box-shadow: ${({ theme }) => theme.colors.cardShadow};
+  padding: 22px 18px;
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  transition: box-shadow 0.18s, transform 0.18s;
+  &:hover {
+    box-shadow: 0 4px 24px rgba(0,173,159,0.18);
+    transform: translateY(-2px) scale(1.01);
+  }
 `;
 
 const Title = styled(Link)`
@@ -50,16 +55,16 @@ const AddToCartButton = styled.button`
   background: ${({ theme }) => theme.colors.primary};
   color: #fff;
   border: none;
-  border-radius: 4px;
-  padding: 5px 18px;
-  font-weight: 500;
-  font-size: 0.95rem;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  margin-top: 6px;
+  margin-top: 10px;
   align-self: flex-end;
   transition: background 0.18s;
   &:hover {
-    background: #7c3aed;
+    background: ${({ theme }) => theme.colors.accent};
   }
 `;
 

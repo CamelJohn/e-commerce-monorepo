@@ -5,7 +5,7 @@ import VendorPage from './pages/vendor/vendor.page';
 import VendorsPage from './pages/vendor/vendors.page';
 import ProductsPage from './pages/product/products.page';
 import MainLayout from './shared/MainLayout';
-import GlobalThemeProvider from './theme';
+import GlobalThemeProvider from './theme/provider';
 import { VendorsProvider } from './pages/vendor/vendor.context';
 import { ProductsProvider } from './pages/product/product.context';
 import { CartProvider } from './cart/cart.context';

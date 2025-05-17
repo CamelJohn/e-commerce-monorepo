@@ -1,17 +1,23 @@
-import { Link } from 'react-router-dom';
-import { useVendors } from './vendor.context';
+import { ListDisplay } from '../../shared/ListDisplay';
 import VendorCard from './vendor.card';
+import { useVendors, type Vendor } from './vendor.context';
+
+const columns: { key: keyof Vendor; label: string; render?: (v: Vendor) => React.ReactNode }[] = [
+  { key: 'name', label: 'Name' },
+  { key: 'description', label: 'Description' },
+  { key: 'contactEmail', label: 'Contact', render: (v) => <a href={`mailto:${v.contactEmail}`}>{v.contactEmail}</a> },
+];
 
 const VendorsPage = () => {
   const vendors = useVendors();
   return (
-    <div>
-      <h2>All Vendors</h2>
-      {vendors.map((v) => (
-        <VendorCard key={v.id} {...v} />
-      ))}
-      <Link to="/">Back to Home</Link>
-    </div>
+    <ListDisplay
+      title="All Vendors"
+      data={vendors}
+      columns={columns}
+      renderCard={(v: Vendor) => <VendorCard key={v.id} {...v} />}
+      searchKeys={['name', 'description', 'contactEmail']}
+    />
   );
 };
 

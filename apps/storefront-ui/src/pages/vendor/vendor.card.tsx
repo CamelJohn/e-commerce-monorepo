@@ -1,47 +1,22 @@
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import type { Vendor } from './vendor.context';
 
 const Card = styled.div`
-  background: ${({ theme }) => theme.colors.navBg};
+  background: ${({ theme }) => theme.colors.cardBg};
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(162, 89, 255, 0.07);
-  padding: 20px;
+  box-shadow: ${({ theme }) => theme.colors.cardShadow};
+  padding: 22px 18px;
   margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 `;
 
-const Title = styled(Link)`
-  color: ${({ theme }) => theme.colors.primary};
-  font-size: 1.2rem;
-  font-weight: 600;
-  text-decoration: none;
-  margin-bottom: 4px;
-  &:hover {
-    text-decoration: underline;
-  }
-`;
-
-const Description = styled.p`
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0;
-  font-size: 0.98rem;
-`;
-
-interface VendorCardProps {
-  id: string;
-  name: string;
-  description: string;
-  children?: React.ReactNode;
-}
-
-const VendorCard = ({ id, name, description, children }: VendorCardProps) => (
+const VendorCard = (vendor: Vendor) => (
   <Card>
-    <Title to={`/vendor/${id}`}>{name}</Title>
-    <Description>{description}</Description>
-    {children}
+      <h3>{vendor.name}</h3>
+      <p>{vendor.description}</p>
+      <p>
+        <a href={`mailto:${vendor.contactEmail}`}>{vendor.contactEmail}</a>
+      </p>
   </Card>
 );
 
