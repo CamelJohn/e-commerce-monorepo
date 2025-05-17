@@ -10,7 +10,7 @@ const CheckoutContainer = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 10px;
   padding: 32px 28px;
-  box-shadow: 0 2px 12px rgba(162,89,255,0.07);
+  box-shadow: 0 2px 12px rgba(0,173,159,0.07);
 `;
 
 const Section = styled.section`
@@ -48,6 +48,10 @@ const Input = styled.input`
   margin-bottom: 14px;
   background: ${({ theme }) => theme.colors.background};
   color: ${({ theme }) => theme.colors.text};
+  &:focus {
+    outline: 2px solid ${({ theme }) => theme.colors.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
 `;
 
 const CheckoutButton = styled.button`
@@ -63,7 +67,12 @@ const CheckoutButton = styled.button`
   cursor: pointer;
   transition: background 0.18s;
   &:hover {
-    background: #7c3aed;
+    background: ${({ theme }) => theme.colors.accent};
+  }
+  &:disabled {
+    background: ${({ theme }) => theme.colors.border};
+    cursor: not-allowed;
+    color: #aaa;
   }
 `;
 
@@ -72,7 +81,6 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  // Simple state for form fields
   const [form, setForm] = useState({
     billingName: '',
     billingEmail: '',
@@ -88,9 +96,10 @@ const CheckoutPage = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const isFormValid = Object.values(form).every(Boolean);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would validate and process payment/order
     clearCart();
     alert('Order placed! Thank you for shopping.');
     navigate('/');
@@ -108,12 +117,12 @@ const CheckoutPage = () => {
 
   return (
     <CheckoutContainer>
-      <h2>Review Your Order</h2>
+      <h2 style={{ marginBottom: 24 }}>Review Your Order</h2>
       <Section>
         {items.map(item => (
           <ItemRow key={item.id}>
             <span>
-              {item.name} <span style={{ color: '#a259ff' }}>× {item.quantity}</span>
+              {item.name} <span style={{ color: '#00AD9F' }}>× {item.quantity}</span>
             </span>
             <span>${(item.price * item.quantity).toFixed(2)}</span>
           </ItemRow>
@@ -123,33 +132,33 @@ const CheckoutPage = () => {
           <span>${total.toFixed(2)}</span>
         </TotalRow>
       </Section>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} autoComplete="on">
         <Section>
           <h3>Billing Information</h3>
           <Label htmlFor="billingName">Full Name</Label>
-          <Input id="billingName" name="billingName" value={form.billingName} onChange={handleChange} required />
+          <Input id="billingName" name="billingName" value={form.billingName} onChange={handleChange} required autoComplete="name" />
           <Label htmlFor="billingEmail">Email</Label>
-          <Input id="billingEmail" name="billingEmail" type="email" value={form.billingEmail} onChange={handleChange} required />
+          <Input id="billingEmail" name="billingEmail" type="email" value={form.billingEmail} onChange={handleChange} required autoComplete="email" />
         </Section>
         <Section>
           <h3>Shipping Address</h3>
           <Label htmlFor="shippingAddress">Address</Label>
-          <Input id="shippingAddress" name="shippingAddress" value={form.shippingAddress} onChange={handleChange} required />
+          <Input id="shippingAddress" name="shippingAddress" value={form.shippingAddress} onChange={handleChange} required autoComplete="street-address" />
           <Label htmlFor="shippingCity">City</Label>
-          <Input id="shippingCity" name="shippingCity" value={form.shippingCity} onChange={handleChange} required />
+          <Input id="shippingCity" name="shippingCity" value={form.shippingCity} onChange={handleChange} required autoComplete="address-level2" />
           <Label htmlFor="shippingZip">ZIP/Postal Code</Label>
-          <Input id="shippingZip" name="shippingZip" value={form.shippingZip} onChange={handleChange} required />
+          <Input id="shippingZip" name="shippingZip" value={form.shippingZip} onChange={handleChange} required autoComplete="postal-code" />
         </Section>
         <Section>
           <h3>Payment</h3>
           <Label htmlFor="cardNumber">Card Number</Label>
-          <Input id="cardNumber" name="cardNumber" value={form.cardNumber} onChange={handleChange} required />
+          <Input id="cardNumber" name="cardNumber" value={form.cardNumber} onChange={handleChange} required autoComplete="cc-number" />
           <Label htmlFor="cardExpiry">Expiry (MM/YY)</Label>
-          <Input id="cardExpiry" name="cardExpiry" value={form.cardExpiry} onChange={handleChange} required />
+          <Input id="cardExpiry" name="cardExpiry" value={form.cardExpiry} onChange={handleChange} required autoComplete="cc-exp" />
           <Label htmlFor="cardCVC">CVC</Label>
-          <Input id="cardCVC" name="cardCVC" value={form.cardCVC} onChange={handleChange} required />
+          <Input id="cardCVC" name="cardCVC" value={form.cardCVC} onChange={handleChange} required autoComplete="cc-csc" />
         </Section>
-        <CheckoutButton type="submit">Place Order</CheckoutButton>
+        <CheckoutButton type="submit" disabled={!isFormValid}>Place Order</CheckoutButton>
       </form>
       <Link to="/cart" style={{ display: 'block', marginTop: 16, textAlign: 'center' }}>
         Back to Cart

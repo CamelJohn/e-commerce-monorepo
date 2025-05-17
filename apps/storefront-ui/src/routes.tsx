@@ -4,7 +4,7 @@ import ProductPage from './pages/product/product.page';
 import VendorPage from './pages/vendor/vendor.page';
 import VendorsPage from './pages/vendor/vendors.page';
 import ProductsPage from './pages/product/products.page';
-import MainLayout from './shared/MainLayout';
+import MainLayout from './shared/Layout/MainLayout';
 import GlobalThemeProvider from './theme/provider';
 import { VendorsProvider } from './pages/vendor/vendor.context';
 import { ProductsProvider } from './pages/product/product.context';
